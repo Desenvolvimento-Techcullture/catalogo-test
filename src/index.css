@@ -1,0 +1,190 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base {
+    html {
+        /* font-family: 'Arial', sans-serif !important; */
+    }
+     :root {
+        /* =========================
+          Base
+       ========================= */
+        --background: 221 90% 98%;
+        /* muito claro neutro para contraste */
+        --foreground: 220 15% 10%;
+        /* texto escuro */
+        --card: 0 0% 100%;
+        --card-foreground: 220 15% 10%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 220 15% 10%;
+        /* =========================
+          Marca – Paleta Distrimov
+       ========================= */
+        --primary: 221 90% 42%;
+        /* Azul principal */
+        --primary-foreground: 0 0% 100%;
+        /* Branco */
+        --primary-accent: 49 100% 50%;
+        /* Amarelo vivo secundário */
+        /* Gradiente primário */
+        --primary-gradient: linear-gradient( 135deg, hsl(221 90% 45%) 0%, hsl(221 90% 42%) 60%, hsl(49, 100%, 50%) 100%);
+        --primary-gradient-animated: linear-gradient( 135deg, hsl(221 90% 48%), hsl(221 90% 42%), hsl(49 100% 50%), hsl(221 90% 45%));
+        /* =========================
+          Cinzas & apoio
+       ========================= */
+        --secondary: 0 0% 90%;
+        --secondary-foreground: 0 0% 35%;
+        --muted: 0 0% 92%;
+        --muted-foreground: 0 0% 45%;
+        --accent: 221 90% 42%;
+        --accent-foreground: 0 0% 100%;
+        /* =========================
+          Footer
+       ========================= */
+        --footer: 220 15% 15%;
+        --footer-foreground: 0 0% 95%;
+        /* =========================
+          Destructive
+       ========================= */
+        --destructive: 0 75% 55%;
+        --destructive-foreground: 0 0% 98%;
+        /* =========================
+          Borders & Inputs
+       ========================= */
+        --border: 0 0% 85%;
+        --input: 0 0% 85%;
+        --ring: 221 90% 42%;
+        --radius: 0.5rem;
+        /* =========================
+          Gradientes & Sombras
+       ========================= */
+        --gradient-hero: linear-gradient( 135deg, hsl(221 90% 90%) 0%, hsl(0 0% 98%) 100%);
+        --gradient-overlay: linear-gradient( 180deg, transparent 0%, hsl(0 0% 0% / 0.6) 100%);
+        --shadow-elegant: 0 10px 40px -10px hsl(0 0% 0% / 0.1);
+        --shadow-hover: 0 20px 60px -15px hsl(0 0% 0% / 0.15);
+        --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .dark {
+        --background: 220 15% 10%;
+        --foreground: 0 0% 95%;
+        --card: 220 15% 14%;
+        --card-foreground: 0 0% 95%;
+        --primary: 221 90% 50%;
+        --primary-foreground: 0 0% 100%;
+        --primary-gradient: linear-gradient( 135deg, hsl(221 90% 55%) 0%, hsl(221 90% 50%) 50%, hsl(49 100% 45%) 100%);
+        --primary-gradient-animated: linear-gradient( 135deg, hsl(221 90% 58%), hsl(221 90% 50%), hsl(49 100% 45%), hsl(221 90% 50%));
+        --secondary: 0 0% 20%;
+        --secondary-foreground: 0 0% 80%;
+        --muted: 0 0% 22%;
+        --muted-foreground: 0 0% 60%;
+        --border: 0 0% 25%;
+        --input: 0 0% 25%;
+        --ring: 221 90% 42%;
+    }
+}
+
+@layer components {
+    /* Header */
+    .header-marketplace {
+        background: var(--header-gradient);
+        @apply sticky top-0 z-50 shadow-sm;
+    }
+    /* Product Cards */
+    .product-card {
+        @apply bg-card rounded-lg overflow-hidden transition-all duration-300 cursor-pointer;
+        box-shadow: var(--card-shadow);
+    }
+    .product-card:hover {
+        box-shadow: var(--card-shadow-hover);
+        @apply -translate-y-1;
+    }
+    /* Badges */
+    .badge-discount {
+        background: var(--discount-badge);
+        @apply text-white text-xs font-semibold px-2 py-1 rounded;
+    }
+    .badge-free-shipping {
+        background: var(--product-badge-gradient);
+        @apply text-white text-xs font-semibold px-2 py-1 rounded;
+    }
+    .badge-stock-low {
+        /* @apply bg-warning text-warning-foreground text-xs font-semibold px-2 py-1 rounded; */
+        @apply bg-destructive text-destructive-foreground text-xs font-semibold px-2 py-1 rounded;
+    }
+    .badge-out-of-stock {
+        @apply bg-destructive text-destructive-foreground text-xs font-semibold px-2 py-1 rounded;
+    }
+    /* Price styling */
+    .price-current {
+        @apply text-2xl text-foreground;
+    }
+    .price-original {
+        @apply text-sm text-muted-foreground line-through;
+    }
+    .price-discount-percent {
+        @apply text-sm font-semibold text-primary;
+    }
+    /* Search Input */
+    .search-marketplace {
+        @apply w-full bg-white rounded-md border-0 shadow-inner px-4 py-2.5 text-foreground placeholder: text-muted-foreground focus: ring-2 focus: ring-accent focus: outline-none;
+    }
+    /* Admin Panel */
+    .admin-sidebar {
+        @apply bg-card border-r border-border min-h-screen;
+    }
+    .admin-sidebar-link {
+        @apply flex items-center gap-3 px-4 py-3 text-muted-foreground hover: bg-secondary hover: text-foreground transition-colors rounded-lg mx-2;
+    }
+    .admin-sidebar-link.active {
+        @apply bg-accent text-accent-foreground;
+    }
+    /* Image Zoom Container */
+    .image-zoom-container {
+        @apply overflow-hidden relative;
+    }
+    .image-zoom-container img {
+        @apply transition-transform duration-300 ease-out;
+    }
+    .image-zoom-container:hover img {
+        @apply scale-110;
+    }
+}
+
+@layer utilities {
+    /* =========================
+       Transições & sombras
+    ========================= */
+    .transition-smooth {
+        transition: var(--transition-smooth);
+    }
+    .shadow-elegant {
+        box-shadow: var(--shadow-elegant);
+    }
+    .shadow-hover {
+        box-shadow: var(--shadow-hover);
+    }
+    /* =========================
+       Gradiente primário
+    ========================= */
+    .bg-primary-gradient {
+        background: var(--primary-gradient);
+    }
+    /* =========================
+       Hover animado (luxo)
+    ========================= */
+    .btn-primary-animated {
+        background: var(--primary-gradient-animated);
+        background-size: 300% 300%;
+        color: hsl(var(--primary-foreground));
+        transition: background-position 0.6s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .btn-primary-animated:hover {
+        background-position: 100% 50%;
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-hover);
+    }
+    .btn-primary-animated:active {
+        transform: translateY(0);
+        box-shadow: var(--shadow-elegant);
+    }
+}
