@@ -59,7 +59,7 @@ const Admin = () => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false);
 
-  
+
 
   // ===== Autenticação =====
   if (!isAuthenticated) return <Navigate to="/login" replace />;
@@ -115,6 +115,7 @@ const Admin = () => {
     name: "",
     price: "",
     original_price: "",
+    reseller_price: "",
     quantity: "",
     category: "",
     images: [],
@@ -130,6 +131,7 @@ const Admin = () => {
       name: "",
       price: "",
       original_price: "",
+      reseller_price: "",
       max_installments: "",
       quantity: "",
       category: "",
@@ -146,6 +148,7 @@ const Admin = () => {
       name: product.name,
       price: product.price.toString(),
       original_price: product.original_price?.toString() || "",
+      reseller_price: product.reseller_price?.toString() || "",
       max_installments: product.max_installments || "",
       quantity: product.quantity.toString(),
       category: product.category,
@@ -209,6 +212,7 @@ const Admin = () => {
       name: formData.name,
       price: parseFloat(formData.price),
       original_price: formData.original_price ? parseFloat(formData.original_price) : null,
+      reseller_price: formData.reseller_price ? parseFloat(formData.reseller_price) : null,
       max_installments: formData.max_installments ? parseFloat(formData.max_installments) : null,
       quantity: parseFloat(formData.quantity),
       category: formData.category,
@@ -276,11 +280,11 @@ const Admin = () => {
     setIsOrderDialogOpen(true);
   };
 
-  const handleWhatsAppMessage = (name: string,  number: string) => {
+  const handleWhatsAppMessage = (name: string, number: string) => {
     let url = `https://wa.me/${number}?text=`;
 
-    url += `Olá ${ name.split(' ')[0]}, tudo bem? \n Entrando em contato a respeito do pedido feito em nosso catálogo. Tem um tempinho? `;
-    window.open( url , '__blank');
+    url += `Olá ${name.split(' ')[0]}, tudo bem? \n Entrando em contato a respeito do pedido feito em nosso catálogo. Tem um tempinho? `;
+    window.open(url, '__blank');
   }
 
   // ===== Filtragem produtos =====
@@ -291,15 +295,15 @@ const Admin = () => {
 
   useEffect(() => {
 
-    switch(activeTab){
+    switch (activeTab) {
       case "orders": fetchOrders();
-      break;
+        break;
       case "customers": fetchCustomers();
-      break;
+        break;
       case "messages": fetchMessages();
-      break;
+        break;
     }
-    }, [activeTab]);
+  }, [activeTab]);
   // ===== Render =====
   return (
     <div className="min-h-screen flex flex-col">
@@ -377,25 +381,30 @@ const Admin = () => {
                         <Input type="number" value={formData.price} onChange={e => setFormData({ ...formData, price: e.target.value })} required />
                       </div>
                       <div>
-                        <Label>Preço Parcelado</Label>
-                        <Input type="number" value={formData.original_price} onChange={e => setFormData({ ...formData, original_price: e.target.value })} />
+                        <Label>Preço Revenda</Label>
+                        <Input type="number" value={formData.reseller_price} onChange={e => setFormData({ ...formData, reseller_price: e.target.value })} />
                       </div>
 
                     </div>
                     <div className="grid grid-cols-2 gap-4">
-
+                      <div>
+                        <Label>Preço Parcelado</Label>
+                        <Input type="number" value={formData.original_price} onChange={e => setFormData({ ...formData, original_price: e.target.value })} />
+                      </div>
                       <div>
                         <Label>Máximo de Parcelas</Label>
                         <Input type="number" value={formData.max_installments} min={1} onChange={e => setFormData({ ...formData, max_installments: e.target.value })} />
                       </div>
+                    </div>
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
                         <Label>Estoque</Label>
                         <Input type="number" value={formData.quantity} onChange={e => setFormData({ ...formData, quantity: e.target.value })} required />
                       </div>
-                    </div>
-                    <div>
-                      <Label>Categoria</Label>
-                      <Input value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} required />
+                      <div>
+                        <Label>Categoria</Label>
+                        <Input value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} required />
+                      </div>
                     </div>
                     {/* Upload múltiplas imagens */}
                     <div>
@@ -481,30 +490,30 @@ const Admin = () => {
                           <div>
                             <CardTitle>{product.name}</CardTitle>
                             <CardDescription>{product.category} • R$ {product.price.toFixed(2)}</CardDescription>
-                            {product.description && ( <p className="text-sm text-muted-foreground line-clamp-3 whitespace-pre-line">{product.description}</p> )}
+                            {product.description && (<p className="text-sm text-muted-foreground line-clamp-3 whitespace-pre-line">{product.description}</p>)}
                             <p className="text-sm">Estoque: {product.quantity}</p>
                           </div>
                         </div>
-                       
+
                       </div>
                     </CardHeader>
-                    
-                      <CardContent>
-                        
-                        <div className="flex gap-2 justify-center md:justify-end">
-                          <Button className="w-full sm:w-auto" size="sm" variant="outline" onClick={() => handleEditProduct(product)}><Pencil className="h-4 w-4" />Editar</Button>
-                          <Button className="w-full sm:w-auto" size="sm" variant="destructive" onClick={() => handleDeleteProduct(String(product.id))}><Trash2 className="h-4 w-4" />Excluir</Button>
-                        </div>
-                      </CardContent>
-                    
-                    
+
+                    <CardContent>
+
+                      <div className="flex gap-2 justify-center md:justify-end">
+                        <Button className="w-full sm:w-auto" size="sm" variant="outline" onClick={() => handleEditProduct(product)}><Pencil className="h-4 w-4" />Editar</Button>
+                        <Button className="w-full sm:w-auto" size="sm" variant="destructive" onClick={() => handleDeleteProduct(String(product.id))}><Trash2 className="h-4 w-4" />Excluir</Button>
+                      </div>
+                    </CardContent>
+
+
                   </Card>
                 ))}
               </div>
             </div>
           )}
 
-{activeTab === "orders" && (
+          {activeTab === "orders" && (
             <div>
 
               <Dialog open={isOrderDialogOpen} onOpenChange={setIsOrderDialogOpen}>
@@ -523,10 +532,10 @@ const Admin = () => {
                         <h3 className="font-semibold text-lg mb-2">Cliente</h3>
                         <p><strong>Nome:</strong> {selectedOrder.customer.name} </p>
                         <p><strong>Email:</strong> {selectedOrder.customer.email} </p>
-                        <p className="flex"><strong>Telefone:</strong> {selectedOrder.customer.phone} 
-                        <Button  title="Chamar no WhatsApp" className="h-5 w-5 mx-5"  variant="link"  onClick={() => handleWhatsAppMessage(selectedOrder.customer.name, selectedOrder.customer.phone)}>
-                          <WhatsAppIcon  className=" text-green-500" />
-                        </Button> </p>
+                        <p className="flex"><strong>Telefone:</strong> {selectedOrder.customer.phone}
+                          <Button title="Chamar no WhatsApp" className="h-5 w-5 mx-5" variant="link" onClick={() => handleWhatsAppMessage(selectedOrder.customer.name, selectedOrder.customer.phone)}>
+                            <WhatsAppIcon className=" text-green-500" />
+                          </Button> </p>
                       </div>
 
                       {/* Itens */}
@@ -555,18 +564,18 @@ const Admin = () => {
                       {/* Resumo */}
                       <div className="border-t pt-4">
                         <p><strong>Subotal:</strong> R$ {selectedOrder.subtotal.toFixed(2)}</p>
-                        {selectedOrder.shipping.cost > 0 && ( 
+                        {selectedOrder.shipping.cost > 0 && (
                           <p><strong>Frete:</strong> R$ {selectedOrder.shipping.cost.toFixed(2)}</p>
 
                         )}
-                        {selectedOrder.discount > 0 && ( 
+                        {selectedOrder.discount > 0 && (
                           <p><strong>Desconto:</strong> R$ {selectedOrder.discount.toFixed(2)}</p>
 
                         )}
                         <p><strong>Total:</strong> R$ {selectedOrder.total.toFixed(2)}</p>
                         <p><strong>Forma de pagamento:</strong> {selectedOrder.paymentMethod}</p>
                         <p><strong>Status:</strong> {selectedOrder.status}</p>
-                        
+
                       </div>
 
                     </div>
@@ -607,7 +616,7 @@ const Admin = () => {
                                   <Button
                                     variant="secondary"
                                     className="w-full"
-                                  onClick={() => handleViewOrder(order)}
+                                    onClick={() => handleViewOrder(order)}
                                   >
                                     Ver Detalhes
                                   </Button>
@@ -680,21 +689,21 @@ const Admin = () => {
                 <p>Você não tem mensagens.</p>
               ) : (
                 messages
-                .sort((a, b) => b.id - a.id)
-                .map((message) => (
-                  <Card key={message.id} className="mb-4">
-                    <CardHeader>
-                      <div className="flex justify-between">
-                        <div>
-                          <CardTitle>{message.name}</CardTitle>
-                          <CardDescription className="text-primary">Email: {message.email}</CardDescription>
-                          <p className="whitespace-pre-line m-4"> {message.message}</p>
-                          <CardDescription>Enviada: {message.created}</CardDescription>
+                  .sort((a, b) => b.id - a.id)
+                  .map((message) => (
+                    <Card key={message.id} className="mb-4">
+                      <CardHeader>
+                        <div className="flex justify-between">
+                          <div>
+                            <CardTitle>{message.name}</CardTitle>
+                            <CardDescription className="text-primary">Email: {message.email}</CardDescription>
+                            <p className="whitespace-pre-line m-4"> {message.message}</p>
+                            <CardDescription>Enviada: {message.created}</CardDescription>
+                          </div>
                         </div>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                ))
+                      </CardHeader>
+                    </Card>
+                  ))
               )}
             </div>
           )}

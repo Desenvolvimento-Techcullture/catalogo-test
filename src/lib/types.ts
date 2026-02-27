@@ -24,6 +24,7 @@ export interface ProductForm {
     name: string;
     price: string;
     original_price: string;
+    reseller_price?: string;
     max_installments?: string;
     quantity: string;
     category: string;
