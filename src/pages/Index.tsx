@@ -23,7 +23,7 @@ const Index = () => {
 
       <main className="flex-1">
         {/* Hero Section */}
-        {(banners.length == 1) && (<section className="relative h-[25vh] md:h-[50vh] md:min-h-[300px] overflow-hidden bg-secondary">
+        {(banners.length == 1) && (<section className="relative aspect-[7/3] w-full landscape:h-[50vh] landscape:min-h-[300px] overflow-hidden bg-secondary">
           <div className="absolute inset-0">
             <img
               src={banners[0].image}
