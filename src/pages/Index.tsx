@@ -7,6 +7,8 @@ import ProductCard from "@/components/ProductCard";
 import { BannerCarousel } from "@/components/BannerCarousel";
 import { useProduct } from "@/contexts/ProductContext";
 import { banners } from "@/assets/data.js";
+import CategoriesSection from "@/components/CategoriesSection";
+import CreatableSelect from "react-select/creatable";
 
 
 
@@ -59,7 +61,11 @@ const Index = () => {
           </div>
         </section>)}
         {(banners.length > 1) && (<BannerCarousel />)}
-
+        <CategoriesSection 
+          title="title"
+          subtitle="subtitle"
+          categories={categories}
+        />
         {/* Featured Products Section */}
         <section className="py-20 bg-background">
           <div className="container mx-auto px-4">

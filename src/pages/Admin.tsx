@@ -41,11 +41,12 @@ import { useAuthFetch } from "@/hooks/use-auth-fetch";
 import { formatDateBR } from "@/lib/utils";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 import { normalizeText } from "@/lib/utils";
+import CreatableSelect from "react-select/creatable";
 
 const Admin = () => {
   const { toast } = useToast();
   const { isAuthenticated } = useAuth();
-  const { products, addProduct, updateProduct, removeProduct, reloadProducts, loading, error } = useProduct();
+  const { products, categories, addProduct, updateProduct, removeProduct, reloadProducts, loading, error } = useProduct();
   const { authFetch, loading: loadingFetch, error: fetchError } = useAuthFetch();
 
   const [activeTab, setActiveTab] = useState<"products" | "orders" | "customers" | "messages">(
@@ -403,7 +404,22 @@ const Admin = () => {
                       </div>
                       <div>
                         <Label>Categoria</Label>
-                        <Input value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} required />
+                        <CreatableSelect 
+                          options={categories.map(category => ({ value: category, label: category }))}
+                          styles={{
+                            control: (base) => ({
+                              ...base,
+                              backgroundColor: "primary"
+                            }),
+                            menu: (base) => ({
+                              ...base,
+                              backgroundColor: "background"
+                            })
+                          }}
+                         value={{value:formData.category, label: formData.category}} onChange={e => setFormData({ ...formData, category: e.value })} 
+                         required />
+                  
+                        {/* <Input value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} required /> */}
                       </div>
                     </div>
                     {/* Upload múltiplas imagens */}
@@ -536,6 +552,8 @@ const Admin = () => {
                           <Button title="Chamar no WhatsApp" className="h-5 w-5 mx-5" variant="link" onClick={() => handleWhatsAppMessage(selectedOrder.customer.name, selectedOrder.customer.phone)}>
                             <WhatsAppIcon className=" text-green-500" />
                           </Button> </p>
+                        <p><strong>Endereço:</strong> {selectedOrder.shipping?.address}</p>
+
                       </div>
 
                       {/* Itens */}
