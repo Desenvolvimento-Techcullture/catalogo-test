@@ -49,7 +49,7 @@ const Admin = () => {
   const { products, categories, addProduct, updateProduct, removeProduct, reloadProducts, loading, error } = useProduct();
   const { authFetch, loading: loadingFetch, error: fetchError } = useAuthFetch();
 
-  const [activeTab, setActiveTab] = useState<"products" | "orders" | "customers" | "messages" | "sellers" >(
+  const [activeTab, setActiveTab] = useState<"products" | "orders" | "customers" | "messages" | "sellers">(
     "products"
   );
   const [orders, setOrders] = useState<Order[]>([]);
@@ -265,6 +265,15 @@ const Admin = () => {
     toast({ title: "Produto deletado", description: "Produto deletado com sucesso!" });
   };
 
+  const handleDeleteSeller = (id: string) => {
+    if (!confirm("Deseja realmente deletar este vendedor?")) return;
+    const index = sellers.findIndex((p) => p.id == parseInt(id));
+    sellers.splice(index, 1);
+    // localStorage.setItem("products", JSON.stringify(initialProducts));
+    
+    toast({ title: "Vendedor deletado", description: "Produto deletado com sucesso!" });
+  };
+
   const handleConfirmOrder = (order) => {
     if (!confirm(`Deseja confirmar o pedido ${order.id}?`)) return;
 
@@ -426,7 +435,7 @@ const Admin = () => {
                       </div>
                       <div>
                         <Label>Categoria</Label>
-                        <CreatableSelect 
+                        <CreatableSelect
                           options={categories.map(category => ({ value: category, label: category }))}
                           styles={{
                             control: (base) => ({
@@ -438,9 +447,9 @@ const Admin = () => {
                               backgroundColor: "background"
                             })
                           }}
-                         value={{value:formData.category, label: formData.category}} onChange={e => setFormData({ ...formData, category: e.value })} 
-                         required />
-                  
+                          value={{ value: formData.category, label: formData.category }} onChange={e => setFormData({ ...formData, category: e.value })}
+                          required />
+
                         {/* <Input value={formData.category} onChange={e => setFormData({ ...formData, category: e.target.value })} required /> */}
                       </div>
                     </div>
@@ -750,7 +759,7 @@ const Admin = () => {
           {activeTab === "sellers" && (
             <div>
               <h2 className="text-2xl font-bold mb-4">Vendedores</h2>
-            
+
               {loadingCustomers ? (
                 <p>Carregando vendedores...</p>
               ) : fetchError ? (
@@ -773,6 +782,12 @@ const Admin = () => {
                           </div>
                         </div>
                       </CardHeader>
+                      {/* <CardContent>
+                        <div className="flex gap-2 justify-center md:justify-end">
+                          <Button className="w-full sm:w-auto" size="sm" variant="outline" onClick={() => handleEditSeller(message)}><Pencil className="h-4 w-4" />Editar</Button>
+                          <Button className="w-full sm:w-auto" size="sm" variant="destructive" onClick={() => handleDeleteSeller(String(message.id))}><Trash2 className="h-4 w-4" />Excluir</Button>
+                        </div>
+                      </CardContent> */}
                     </Card>
                   ))
               )}
