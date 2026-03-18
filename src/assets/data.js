@@ -3,23 +3,6 @@
 
 // import carroussel1 from '@/assets/banner_site.png';
 
-export const banners = [{
-    id: "1",
-    image: './banner.png',
-    title: "",
-    description: "",
-    buttons: [
-        // { link: "/products", description: "Meus produtos legais", variant: 'outlineDark' },
-        // { link: "/products", description: "Contatos legais", variant: 'dark' },
-        //     { link: "/products", description: "outras coisas legais legais", variant: 'primary' },
-    ]
-}];
-
-
-
-export const API_BASE_URL = "https://techculture.portaldeanuncios.com/distrimov/api/";
-export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwic3lzIjoiY2F0YWxvZyIsIm93bmVyIjoidGVjaGN1bHR1cmUiLCJpYXQiOjE3Njk1MjQ5NzksImV4cCI6MTc2OTUyODU3OX0=.jZP+Ek0Ojx5JuF7EOTO2C48Y0BgX76JV2STJ5aku2ec=';
-
 export const company = {
     name: 'DISTRIMOV',
     logo: '/logo.jpg',
@@ -35,6 +18,25 @@ export const company = {
     twitter: '',
     youtube: '',
 }
+
+export const banners = [{
+    id: "1",
+    image: './banner.png',
+    title: "",
+    description: "",
+    buttons: [
+        { link: "/products", description: "Ver Produtos", variant: 'outlineDark' },
+        { link: company.whatsapp, description: "Compre pelo WhatsApp", variant: 'default' },
+        //     { link: "/products", description: "outras coisas legais legais", variant: 'primary' },
+    ]
+}];
+
+
+
+export const API_BASE_URL = "https://techculture.portaldeanuncios.com/distrimov/api/";
+export const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwic3lzIjoiY2F0YWxvZyIsIm93bmVyIjoidGVjaGN1bHR1cmUiLCJpYXQiOjE3Njk1MjQ5NzksImV4cCI6MTc2OTUyODU3OX0=.jZP+Ek0Ojx5JuF7EOTO2C48Y0BgX76JV2STJ5aku2ec=';
+
+
 const currentMonth = new Date().toLocaleString('pt-BR', { month: 'long' });
 
 export const navLinks = [

@@ -1,8 +1,10 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
 import { User, AuthState, AuthContextType } from '@/lib/types';
+import { useAuthFetch } from "@/hooks/use-auth-fetch";
 
 
-const USERS_API_URL = 'https://techculture.portaldeanuncios.com/api/v2/users/';
+// const USERS_API_URL = 'https://techculture.portaldeanuncios.com/api/v2/users/';
+const USERS_API_URL = 'https://techculture.portaldeanuncios.com/distrimov/api/users';
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
@@ -11,20 +13,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     user: null,
     isAuthenticated: false,
   });
+  const { authFetch } = useAuthFetch();
 
-  const login = useCallback(async (email: string, password: string): Promise<boolean> => {
+  const login = useCallback(async (login: string, password: string): Promise<boolean> => {
     try {
-      // Busca usuários da API
-      const response = await fetch(USERS_API_URL + `?email=${email}`);
-      if (!response.ok) {
-        console.error('Erro ao buscar usuários');
-        return false;
-      }
-      
-      const users: User[] = await response.json();
-      const user = users.find(u => (u.email === email) && (u.password === btoa(password)) );
+      // Busca usuários da API      
+      const users: User[] = await authFetch({url: `/users?email=${login}`});
+      const user = users.find(u => (u.email == login) && (u.password === btoa(password)) );
       const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwic3lzIjoiY2F0YWxvZyIsIm93bmVyIjoidGVjaGN1bHR1cmUiLCJpYXQiOjE3Njk1MjQ5NzksImV4cCI6MTc2OTUyODU3OX0=.jZP+Ek0Ojx5JuF7EOTO2C48Y0BgX76JV2STJ5aku2ec=';
-      
+      console.log(users);
       if (user && password.length >= 6) {
         setAuthState({ user, isAuthenticated: true });
         return true;
@@ -52,22 +49,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         role
       };
 
-      const response = await fetch(USERS_API_URL, {
+      const createdUser: User = await authFetch({
+        url: 'users/',
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(newUser)
+        body: newUser
       });
 
-      if (!response.ok) {
-        console.error('Erro ao cadastrar usuário');
-        return false;
-      }
-
-      const createdUser = await response.json();
-
-      setAuthState({ user: createdUser || newUser, isAuthenticated: true });
+      setAuthState({ user: createdUser.reg || newUser, isAuthenticated: true });
       return true;
     } catch (error) {
       console.error('Erro no cadastro:', error);

@@ -8,6 +8,7 @@ import { useCart } from "@/contexts/CartContext";
 import { useProduct } from "@/contexts/ProductContext";
 import { formatPrice } from "@/lib/utils";
 import { useCatalogTracking } from "@/hooks/catalogTrnking";
+import { ImageCarousel } from "@/components/ImageCarousel";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -199,36 +200,15 @@ const ProductDetail = () => {
               <X />
             </button>
 
-            {/* Botão anterior */}
-            {product.images.length > 1 && (
-              <button
-                className="absolute left-4 text-white text-3xl px-4 py-2"
-                onClick={goToPrevious}
-              >
-                ‹
-              </button>
-            )}
-
+           
             {/* Imagem com swipe */}
-            <img
-              src={product.images[activeImageIndex]}
-              alt={`${product.name} zoom`}
-              // className="max-h-full max-w-full object-contain"
-              className="max-h-[85vh] max-w-[90vw] object-contain animate-fadeIn"
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
+            <ImageCarousel
+              images={product.images}
+              initialIndex={activeImageIndex}
+              onSlideChange={(index) => setActiveImageIndex(index)}
             />
 
-            {/* Botão próximo */}
-            {product.images.length > 1 && (
-              <button
-                className="absolute right-4 text-white text-3xl px-4 py-2"
-                onClick={goToNext}
-              >
-                ›
-              </button>
-            )}
+           
           </div>
         )}
       </main>

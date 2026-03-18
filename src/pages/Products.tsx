@@ -16,7 +16,7 @@ const Products = () => {
   const [searchParams] = useSearchParams();
   const [priceRange, setPriceRange] = useState([0, 10000]);
   const [sizeRange, setSizeRange] = useState([6, 90]);
-  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(JSON.parse(sessionStorage.getItem("selectedCategories")) ||[]);
   const [selectedSizes, setSelectedSizes] = useState<string[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const { products } = useProduct();
@@ -43,7 +43,8 @@ const Products = () => {
         : [...prev, category]
     );
   };
-
+  sessionStorage.setItem("selectedCategories",JSON.stringify(selectedCategories));
+  
   const toggleSize = (size: string) => {
     setSelectedSizes((prev) =>
       prev.includes(size)

@@ -9,6 +9,7 @@ import { useProduct } from "@/contexts/ProductContext";
 import { banners } from "@/assets/data.js";
 import CategoriesSection from "@/components/CategoriesSection";
 import CreatableSelect from "react-select/creatable";
+import WhatsAppIcon from "@/components/WhatsAppIcon";
 
 
 
@@ -22,7 +23,20 @@ const Index = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
+      <div className="flex p-2 gap-2 flex landscape:hidden bg-bege">
+                {banners[0].buttons?.map((btn, idx) => (
+                  <Button key={`${btn.description}-${idx}`} size="default" variant={btn.variant} asChild>
+                   
+                    <Link to={btn.link} target="__blank"> { btn.description.includes('WhatsApp') && (<WhatsAppIcon />)} {btn.description}</Link>
+                  </Button>
+                )
 
+                )}
+
+                {/* <Button size="lg" variant="outline" asChild>
+                  <Link to="/contact">Entre em Contato</Link>
+                </Button> */}
+              </div>
       <main className="flex-1">
         {/* Hero Section */}
         {(banners.length == 1) && (<section className="relative aspect-[7/3] w-full landscape:h-[50vh] landscape:min-h-[300px] overflow-hidden bg-secondary">
@@ -45,13 +59,13 @@ const Index = () => {
                 {banners[0].description}
               </p>
               <div className="flex gap-4">
-                {banners[0].buttons?.map((btn, idx) => (
+                {/* {banners[0].buttons?.map((btn, idx) => (
                   <Button key={`${btn.description}-${idx}`} size="lg" variant={btn.variant} asChild>
                     <Link to={btn.link}>{btn.description}</Link>
                   </Button>
                 )
 
-                )}
+                )} */}
 
                 {/* <Button size="lg" variant="outline" asChild>
                   <Link to="/contact">Entre em Contato</Link>
@@ -65,6 +79,7 @@ const Index = () => {
           title="title"
           subtitle="subtitle"
           categories={categories}
+          className=" md:hidden"
         />
         {/* Featured Products Section */}
         <section className="py-20 bg-background">

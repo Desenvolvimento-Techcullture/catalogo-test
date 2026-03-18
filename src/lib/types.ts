@@ -39,6 +39,7 @@ export interface User {
     name: string;
     phone: string;
     email: string;
+    cpf?: string;
     password: string;
     role?: 'admin' | 'user' | 'seller' | 'developer';
 }

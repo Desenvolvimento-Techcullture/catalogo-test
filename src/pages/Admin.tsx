@@ -49,7 +49,7 @@ const Admin = () => {
   const { products, categories, addProduct, updateProduct, removeProduct, reloadProducts, loading, error } = useProduct();
   const { authFetch, loading: loadingFetch, error: fetchError } = useAuthFetch();
 
-  const [activeTab, setActiveTab] = useState<"products" | "orders" | "customers" | "messages">(
+  const [activeTab, setActiveTab] = useState<"products" | "orders" | "customers" | "messages" | "sellers" >(
     "products"
   );
   const [orders, setOrders] = useState<Order[]>([]);
@@ -57,6 +57,7 @@ const Admin = () => {
   const [loadingOrders, setLoadingOrders] = useState(false);
   const [loadingCustomers, setLoadingCustomers] = useState(false);
   const [messages, setMessages] = useState([]);
+  const [sellers, setSellers] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false);
 
@@ -102,6 +103,19 @@ const Admin = () => {
 
     } catch (err) {
       console.error("Erro ao buscar mensagens:", err);
+    } finally {
+      setLoadingCustomers(false);
+    }
+  };
+  const fetchSellers = async () => {
+    setLoadingCustomers(true);
+    try {
+      const data = await authFetch({ url: "users?role=seller" });
+
+      setSellers(data);
+      console.log(data);
+    } catch (err) {
+      console.error("Erro ao buscar vendedores:", err);
     } finally {
       setLoadingCustomers(false);
     }
@@ -303,6 +317,8 @@ const Admin = () => {
         break;
       case "messages": fetchMessages();
         break;
+      case "sellers": fetchSellers();
+        break;
     }
   }, [activeTab]);
   // ===== Render =====
@@ -341,6 +357,12 @@ const Admin = () => {
               onClick={() => setActiveTab("messages")}
             >
               Mensagens
+            </Button>
+            <Button
+              variant={activeTab === "sellers" ? "default" : "outline"}
+              onClick={() => setActiveTab("sellers")}
+            >
+              Vendedores
             </Button>
           </div>
 
@@ -717,6 +739,37 @@ const Admin = () => {
                             <CardDescription className="text-primary">Email: {message.email}</CardDescription>
                             <p className="whitespace-pre-line m-4"> {message.message}</p>
                             <CardDescription>Enviada: {message.created}</CardDescription>
+                          </div>
+                        </div>
+                      </CardHeader>
+                    </Card>
+                  ))
+              )}
+            </div>
+          )}
+          {activeTab === "sellers" && (
+            <div>
+              <h2 className="text-2xl font-bold mb-4">Vendedores</h2>
+            
+              {loadingCustomers ? (
+                <p>Carregando vendedores...</p>
+              ) : fetchError ? (
+                <p className="text-red-600">{fetchError}</p>
+              ) : sellers.length === 0 ? (
+                <p>Você não tem vendedores cadastrados.</p>
+              ) : (
+                sellers
+                  // .sort((a, b) => b.id - a.id)
+                  .map((message) => (
+                    <Card key={message.id} className="mb-4">
+                      <CardHeader>
+                        <div className="flex justify-between">
+                          <div>
+                            <CardTitle>{message.name}</CardTitle>
+                            <CardDescription className="text-primary">CPF: {message.cpf}</CardDescription>
+                            <CardDescription className="text-primary">Email: {message.email}</CardDescription>
+                            <CardDescription className="text-primary">Telefone: {message.phone}</CardDescription>
+
                           </div>
                         </div>
                       </CardHeader>
