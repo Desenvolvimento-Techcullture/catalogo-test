@@ -141,10 +141,11 @@ const ProductDetail = () => {
                 </p>
                 <h1 className="text-4xl font-light mb-4">{product.name}</h1>
                 <p className="text-3xl font-light text-primary">
-                  {formatPrice(  product.original_price || product.price)}
+                  {/* {formatPrice(  product.original_price || product.price)} */}
+                  {formatPrice( product.price)}
                 </p>
-                {product.max_installments && (<p className="price-current">  <span className="text-sm text-muted-foreground line"> 10x </span>  {formatPrice(product.original_price / 10)}</p>)}
-                {product.original_price && (<p className="text-sm text-muted-foreground line">Ou {formatPrice(product.price)} à vista </p>)}
+                {product.max_installments && false && (<p className="price-current">  <span className="text-sm text-muted-foreground line"> 10x </span>  {formatPrice(product.original_price / 10)}</p>)}
+                {product.original_price && false && (<p className="text-sm text-muted-foreground line">Ou {formatPrice(product.price)} à vista </p>)}
 
               </div>
 

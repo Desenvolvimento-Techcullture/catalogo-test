@@ -35,7 +35,7 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 border-b border-border">
-      <p className=" flex  bg-muted border border-bottom border-2 justify-center font-light text-gray-500 text-sm "> <WhatsAppIcon className="mx-3 w-4"/> Compre pelo Whatsapp <strong>{company.phone}</strong>   <Store className="mx-3 w-4"/> Nossas Lojas </p>
+      {/* <p className=" flex  bg-muted border border-bottom border-2 justify-center font-light text-gray-500 text-sm "> <WhatsAppIcon className="mx-3 w-4"/> Compre pelo Whatsapp <strong>{company.phone}</strong>   <Store className="mx-3 w-4"/> Nossas Lojas </p> */}
       <div className="container mx-auto px-4 py-4">
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}

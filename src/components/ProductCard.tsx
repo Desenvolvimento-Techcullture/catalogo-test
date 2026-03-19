@@ -53,6 +53,7 @@ const ProductCard = ({
         }
       }}
     >
+        
       {/* Faixa Esgotado */}
       {isOutOfStock && (
         <div className="absolute top-4 left-[-40px] z-10 rotate-[-45deg] bg-red-600 text-white text-xs font-semibold px-12 py-1">
@@ -102,7 +103,7 @@ const ProductCard = ({
             {original_price && original_price > price && (
               <p className="text-sm text-muted-foreground ">{formatPrice(original_price)}</p>
             )}
-            { ( max_installments > 0) ?
+            { ( max_installments > 0) && false ?
             (<><p className="price-current">  <span className="text-sm text-muted-foreground line"> {max_installments}x </span>  {formatPrice(original_price / max_installments)}</p><p className="text-sm text-muted-foreground line">Ou {formatPrice(price)} à vista </p></>
             ):
             (<p className="price-current">   {formatPrice(price)}</p>)}
