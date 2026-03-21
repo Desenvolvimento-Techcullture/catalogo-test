@@ -79,7 +79,7 @@ const Index = () => {
           title="title"
           subtitle="subtitle"
           categories={categories}
-          className=" md:hidden"
+          className=" md:hidden bg-primary-gradient text-white"
         />
         {/* Featured Products Section */}
         <section className="py-20 bg-background">
@@ -133,7 +133,7 @@ const Index = () => {
         </section>
 
         {/* Categories Section */}
-        <section className="py-20 bg-primary-gradient opacity-90 text-white">
+        <section className="py-20 bg-primary-gradient opacity-90 text-white hidden md:block">
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-light tracking-tight mb-4">
