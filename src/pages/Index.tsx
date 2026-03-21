@@ -10,6 +10,7 @@ import { banners } from "@/assets/data.js";
 import CategoriesSection from "@/components/CategoriesSection";
 import CreatableSelect from "react-select/creatable";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
+import Letreiro from "@/components/Letreiro";
 
 
 
@@ -75,11 +76,21 @@ const Index = () => {
           </div>
         </section>)}
         {(banners.length > 1) && (<BannerCarousel />)}
+        <div className="">
+
+          <Letreiro 
+          velocidade={30} 
+          altura={50} 
+          texto="• Compre no varejo com preço de atacado;• Frete grátis* ;• A loja que viabiliza seu sonho" 
+          
+          />
+        </div>
         <CategoriesSection 
           title="title"
           subtitle="subtitle"
           categories={categories}
-          className=" md:hidden bg-primary-gradient text-white"
+          className=" md:hidden bg-primary  text-white"
+          linkClassName="  px-4 py-2 rounded-full text-sm border text-blue-700  border-blue-700 transition hover:bg-white/20 text-center whitespace-nowrap"
         />
         {/* Featured Products Section */}
         <section className="py-20 bg-background">
