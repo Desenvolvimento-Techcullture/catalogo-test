@@ -3,6 +3,7 @@ export default function Letreiro({
     velocidade = 1, // quanto menor, mais rápido
     altura = 50,
     repeticoes = 3,
+    estilo = "bg-primary text-white",
   }) {
     // const textos = Array(repeticoes).fill(texto);
     const textos = texto.split(';');
@@ -10,7 +11,7 @@ export default function Letreiro({
   
     return (
       <div
-        className="w-full letreiro text- overflow-hidden flex items-center bg-primary-gradient text-white"
+        className={`w-full letreiro text- overflow-hidden flex items-center ${estilo}`}
         style={{ height: `${altura}px` }}
       >
         <style>

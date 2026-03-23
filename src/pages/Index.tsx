@@ -81,6 +81,7 @@ const Index = () => {
           <Letreiro 
           velocidade={30} 
           altura={50} 
+          estilo="bg-primary-gradient text-white"
           texto="• Compre no varejo com preço de atacado;• Frete grátis* ;• A loja que viabiliza seu sonho" 
           
           />

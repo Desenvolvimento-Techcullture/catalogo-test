@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Eye, EyeOff, Loader2, Mail, Lock, User, PhoneCallIcon } from 'lucide-react';
+import { Eye, EyeOff, Loader2, Gavel, Mail, Lock, User, PhoneCallIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/contexts/AuthContext';
@@ -9,9 +9,8 @@ import { company } from "@/assets/data.js";
 import WhatsAppIcon from '@/components/WhatsAppIcon';
 
 
-
 const Login = () => {
-
+  const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -32,19 +31,32 @@ const Login = () => {
     try {
       let success: boolean;
 
-      success = await login(formData.email, formData.password);
+      if (isLogin) {
+        success = await login(formData.email, formData.password);
+      } else {
+        if (!formData.name.trim()) {
+          toast({
+            title: 'Nome obrigatório',
+            description: 'Por favor, informe seu nome.',
+            variant: 'destructive',
+          });
+          setIsLoading(false);
+          return;
+        }
 
+        success = await register(formData.name, formData.email, formData.phone, formData.password);
+      }
 
       if (success) {
         toast({
-          title: 'Bem-vindo!',
-          description: 'Login realizado com sucesso.',
+          title: isLogin ? 'Bem-vindo!' : 'Conta criada com sucesso!',
+          description: isLogin ? 'Login realizado com sucesso.' : 'Aproveite nossas ofertas e boas compras.',
         });
         navigate('/');
       } else {
         toast({
           title: 'Erro',
-          description: 'Login ou senha inválidos.',
+          description: isLogin ? 'Email ou senha inválidos.' : 'Não foi possível criar sua conta.',
           variant: 'destructive',
         });
       }
@@ -67,15 +79,15 @@ const Login = () => {
 
         <div className="relative z-10 text-center px-12">
           <div className="flex justify-center mb-8">
-            <div className="h-20 w-20 rounded-full from-secondary to-warning flex items-center justify-center shadow-gold">
+            <div className="h-20 w-20 rounded-2xl  from-secondary to-warning flex items-center justify-center shadow-gold">
               {/* <Gavel className="h-10 w-10 text-secondary-foreground" /> */}
-              <img src={company.logo}
-                alt={company.name}
-                className='border w-64 rounded-full bg-cover bg-center'
+              <img src={company.logo} 
+              alt={company.name} 
+              className='border w-64 rounded-full bg-cover bg-center'
               />
             </div>
           </div>
-          <h1 className="text-4xl  text-primary-foreground mb-4">
+          <h1 className="font-serif text-4xl font-bold text-primary-foreground mb-4">
             {company.name}
           </h1>
           <p className="text-primary-foreground/80 text-lg max-w-md mx-auto">
@@ -89,32 +101,66 @@ const Login = () => {
         <div className="w-full max-w-md">
           {/* Mobile Logo */}
           <div className="lg:hidden flex items-center justify-center gap-3 mb-8">
-            <div className="h-12 w-12 rounded-full bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-md">
-              <img src={company.logo}
-                alt={company.name}
-                className='border w-64 rounded-full bg-cover bg-center'
-              />
+            <div className="h-12 w-12 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center shadow-md">
+              <Gavel className="h-6 w-6 text-primary-foreground" />
             </div>
-            <span className="text-2xl font-semibold">{company.name}</span>
+            <span className="font-serif text-2xl font-semibold">{company.name}</span>
           </div>
 
           <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold mb-2">
-              Entrar
+            <h2 className="font-serif text-3xl font-bold mb-2">
+              {isLogin ? 'Entrar' : 'Criar Conta'}
             </h2>
             <p className="text-muted-foreground">
-              Faca login e aproveite nossos beneficios
+              {isLogin
+                ? 'Seja nosso revendedor'
+                : 'Seja nosso revendedor'}
             </p>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            {!isLogin && (
+              <>
+                <div className="space-y-2 animate-slide-up">
+                  <label className="text-sm font-medium text-foreground">Nome</label>
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      type="text"
+                      placeholder="Seu nome completo"
+                      value={formData.name}
+                      onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                      className="pl-10"
+                      disabled={isLoading}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="space-y-2 animate-slide-up">
+                  <label className="text-sm font-medium text-foreground">WhatsApp</label>
+                  <div className="relative">
+                    <WhatsAppIcon className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
+                    <Input
+                      type="number"
+                      placeholder="Seu número de whatsapp"
+                      value={formData.phone}
+                      onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                      className="pl-10"
+                      disabled={isLoading}
+                      required
+                    />
+                  </div>
+                </div>
+              </>
+
+            )}
 
             <div className="space-y-2">
-              <label className="text-sm font-medium text-foreground">Login</label>
+              <label className="text-sm font-medium text-foreground">Email</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
                 <Input
-                  // placeholder="000.000.000-00" inputMode="numeric" pattern="[0-9]*" maxLength={14}
+                  type="email"
                   placeholder="seu@email.com"
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
@@ -159,14 +205,42 @@ const Login = () => {
               {isLoading ? (
                 <>
                   <Loader2 className="h-5 w-5 animate-spin" />
-                  Entrando...
+                  {isLogin ? 'Entrando...' : 'Criando conta...'}
                 </>
               ) : (
-                'Entrar'
+                isLogin ? 'Entrar' : 'Criar Conta'
               )}
             </Button>
+            { (!isLogin && company.uriTermosCondicoes ) && (<div className="flex items-center">
+              <input
+                id="terms"
+                name="terms"
+                type="checkbox"
+                required
+                className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
+              <label htmlFor="terms" className="ml-2 block text-sm text-gray-700">
+                Concordo com as{' '}
+                <a href={company.uriTermosCondicoes} target='__blank' className="font-medium text-primary hover:opacity-70">
+                  Termos e condições
+                </a>{' '}
 
+              </label>
+            </div>)}
           </form>
+
+          <div className="mt-6 text-center">
+            <p className="text-muted-foreground">
+              {isLogin ? 'Não tem uma conta?' : 'Já tem uma conta?'}{' '}
+              <button
+                type="button"
+                onClick={() => setIsLogin(!isLogin)}
+                className="text-primary font-semibold hover:opacity-70"
+              >
+                {isLogin ? 'Criar conta' : 'Entrar'}
+              </button>
+            </p>
+          </div>
 
           <div className="mt-8 text-center">
             <Link to="/" className="text-sm text-muted-foreground hover:text-foreground transition-colors">
