@@ -61,8 +61,77 @@ const Admin = () => {
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false);
 
+  // Seller state
+  const [isSellerDialogOpen, setIsSellerDialogOpen] = useState(false)
+  const [editingSellerId, setEditingSellerId] = useState<string | null>(null)
+  const [searchSeller, setSearchSeller] = useState("")
 
+  const [sellerForm, setSellerForm] = useState({
+    name: "",
+    phone: "",
+    email: "",
+    password: "",
+    role: "seller",
+    cpf: ""
+  })
+  const filteredSellers = sellers.filter((s) =>
+    s.name?.toLowerCase().includes(searchSeller.toLowerCase()) ||
+    s.email?.toLowerCase().includes(searchSeller.toLowerCase())
+  )
 
+  const resetSellerForm = () => {
+    setSellerForm({
+      name: "",
+      phone: "",
+      email: "",
+      password: "",
+      role: "seller",
+      cpf: ""
+    })
+    setEditingSellerId(null)
+  }
+
+  const handleEditSeller = (seller) => {
+    setSellerForm(seller)
+    setEditingSellerId(seller.id)
+    setIsSellerDialogOpen(true)
+  }
+
+  const handleSubmitSeller = async (e) => {
+    e.preventDefault()
+
+    try {
+      if (editingSellerId) {
+        await authFetch({
+          url: `users/${editingSellerId}`,
+          method: "PUT",
+          body: sellerForm
+        })
+
+        toast({ title: "Vendedor atualizado com sucesso!" })
+      } else {
+        sellerForm.password = btoa(sellerForm.password);
+        await authFetch({
+          url: "users/",
+          method: "POST",
+          body: sellerForm
+        })
+
+        toast({ title: "Vendedor criado com sucesso!" })
+      }
+
+      fetchSellers()
+      setIsSellerDialogOpen(false)
+      resetSellerForm()
+
+    } catch (err) {
+      toast({
+        title: "Erro",
+        description: "Erro ao salvar vendedor",
+        variant: "destructive"
+      })
+    }
+  }
   // ===== Autenticação =====
   if (!isAuthenticated) return <Navigate to="/login" replace />;
 
@@ -269,8 +338,9 @@ const Admin = () => {
     if (!confirm("Deseja realmente deletar este vendedor?")) return;
     const index = sellers.findIndex((p) => p.id == parseInt(id));
     sellers.splice(index, 1);
+    authFetch({url :`users/${id}`, method : "DELETE"});
     // localStorage.setItem("products", JSON.stringify(initialProducts));
-    
+
     toast({ title: "Vendedor deletado", description: "Produto deletado com sucesso!" });
   };
 
@@ -758,39 +828,125 @@ const Admin = () => {
           )}
           {activeTab === "sellers" && (
             <div>
-              <h2 className="text-2xl font-bold mb-4">Vendedores</h2>
 
-              {loadingCustomers ? (
-                <p>Carregando vendedores...</p>
-              ) : fetchError ? (
-                <p className="text-red-600">{fetchError}</p>
-              ) : sellers.length === 0 ? (
+              {/* Dialog */}
+              <Dialog open={isSellerDialogOpen} onOpenChange={setIsSellerDialogOpen}>
+                <div className="md:flex items-center justify-between mb-6 gap-4">
+
+                  <Input
+                    placeholder="Pesquisar vendedor..."
+                    value={searchSeller}
+                    onChange={(e) => setSearchSeller(e.target.value)}
+                    className="max-w-md mb-4"
+                  />
+
+                  <DialogTrigger asChild>
+                    <Button onClick={resetSellerForm}>
+                      <Plus className="mr-2 h-4 w-4" />
+                      Novo Vendedor
+                    </Button>
+                  </DialogTrigger>
+                </div>
+
+                <DialogContent className="max-w-xl">
+                  <DialogHeader>
+                    <DialogTitle>
+                      {editingSellerId ? "Editar Vendedor" : "Novo Vendedor"}
+                    </DialogTitle>
+                  </DialogHeader>
+
+                  <form onSubmit={handleSubmitSeller} className="space-y-4">
+
+                    <div>
+                      <Label>Nome</Label>
+                      <Input
+                        value={sellerForm.name}
+                        onChange={(e) => setSellerForm({ ...sellerForm, name: e.target.value })}
+                        required
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
+                      <div>
+                        <Label>Telefone</Label>
+                        <Input
+                          value={sellerForm.phone}
+                          onChange={(e) => setSellerForm({ ...sellerForm, phone: e.target.value })}
+                        />
+                      </div>
+
+                      <div>
+                        <Label>CPF</Label>
+                        <Input
+                          value={sellerForm.cpf}
+                          onChange={(e) => setSellerForm({ ...sellerForm, cpf: e.target.value })}
+                        />
+                      </div>
+                    </div>
+
+                    <div>
+                      <Label>Email</Label>
+                      <Input
+                        type="email"
+                        value={sellerForm.email}
+                        onChange={(e) => setSellerForm({ ...sellerForm, email: e.target.value })}
+                        required
+                      />
+                    </div>
+
+                    <div>
+                      <Label>Senha</Label>
+                      <Input
+                        type="password"
+                        value={sellerForm.password}
+                        onChange={(e) => setSellerForm({ ...sellerForm, password: e.target.value })}
+                        required
+                      />
+                    </div>
+                    <div className="flex justify-end gap-2">
+                      <Button type="button" variant="outline" onClick={() => setIsSellerDialogOpen(false)}>
+                        Cancelar
+                      </Button>
+                      <Button type="submit">
+                        {editingSellerId ? "Atualizar" : "Criar"}
+                      </Button>
+                    </div>
+
+                  </form>
+                </DialogContent>
+              </Dialog>
+
+              {/* Lista */}
+              {filteredSellers.length === 0 ? (
                 <p>Você não tem vendedores cadastrados.</p>
               ) : (
-                sellers
-                  // .sort((a, b) => b.id - a.id)
-                  .map((message) => (
-                    <Card key={message.id} className="mb-4">
+                <div className="grid gap-4">
+                  {filteredSellers.map((seller) => (
+                    <Card key={seller.id}>
                       <CardHeader>
-                        <div className="flex justify-between">
-                          <div>
-                            <CardTitle>{message.name}</CardTitle>
-                            <CardDescription className="text-primary">CPF: {message.cpf}</CardDescription>
-                            <CardDescription className="text-primary">Email: {message.email}</CardDescription>
-                            <CardDescription className="text-primary">Telefone: {message.phone}</CardDescription>
-
-                          </div>
-                        </div>
+                        <CardTitle>{seller.name}</CardTitle>
+                        <CardDescription>{seller.email}</CardDescription>
+                        <p>Telefone: {seller.phone}</p>
+                        <p>CPF: {seller.cpf}</p>
                       </CardHeader>
-                      {/* <CardContent>
-                        <div className="flex gap-2 justify-center md:justify-end">
-                          <Button className="w-full sm:w-auto" size="sm" variant="outline" onClick={() => handleEditSeller(message)}><Pencil className="h-4 w-4" />Editar</Button>
-                          <Button className="w-full sm:w-auto" size="sm" variant="destructive" onClick={() => handleDeleteSeller(String(message.id))}><Trash2 className="h-4 w-4" />Excluir</Button>
+
+                      <CardContent>
+                        <div className="flex gap-2 justify-end">
+                          <Button size="sm" variant="outline" onClick={() => handleEditSeller(seller)}>
+                            <Pencil className="h-4 w-4" />
+                            Editar
+                          </Button>
+                          <Button size="sm" variant="destructive" onClick={() => handleDeleteSeller(String(seller.id))}>
+                            <Trash2 className="h-4 w-4" />
+                            Excluir
+                          </Button>
                         </div>
-                      </CardContent> */}
+                      </CardContent>
                     </Card>
-                  ))
+                  ))}
+                </div>
               )}
+
             </div>
           )}
 
