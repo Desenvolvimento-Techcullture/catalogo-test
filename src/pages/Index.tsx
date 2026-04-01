@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import ProductCard from "@/components/ProductCard";
+import ProductCardHighlight from "@/components/ProductCardHighlight";
 // import heroBanner from "@/assets/hero-banner.jpg";
 import { BannerCarousel } from "@/components/BannerCarousel";
 import { useProduct } from "@/contexts/ProductContext";
@@ -114,13 +114,14 @@ const Index = () => {
                           gap-6
                           mx-auto
                           max-w-7xl
-                          sm:grid-cols-[repeat(auto-fit,minmax(220px,1fr))]
-                          md:grid-cols-[repeat(auto-fit,minmax(220px,290px))]
+                          justify-center
+                          sm:grid-cols-[repeat(auto-fit,minmax(110px,1fr))]
+                          md:grid-cols-[repeat(auto-fit,minmax(110px,290px))]
                         "
               >
 
                 {featuredProducts.map((product) => (
-                  <ProductCard
+                  <ProductCardHighlight
                     key={product.id}
                     id={String(product.id)}
                     image={product.images[0]}
