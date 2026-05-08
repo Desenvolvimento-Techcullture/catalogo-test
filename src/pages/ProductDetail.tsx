@@ -19,7 +19,7 @@ const ProductDetail = () => {
   const [zoomOpen, setZoomOpen] = useState(false);
   const { products } = useProduct();
   const { trackAddToCart, trackViewProduct} = useCatalogTracking();
-  const product = products.find((p) => p.id == id);
+  const product = products.find((p) => p.id == parseInt(id));
 
    // Rastreia o produto
    useEffect(() => {
@@ -144,7 +144,7 @@ const ProductDetail = () => {
                   {/* {formatPrice(  product.original_price || product.price)} */}
                   {formatPrice( product.price)}
                 </p>
-                {product.max_installments && false && (<p className="price-current">  <span className="text-sm text-muted-foreground line"> 10x </span>  {formatPrice(product.original_price / 10)}</p>)}
+                {product.max_installments && true && (<p className="price-current">  <span className="text-sm text-muted-foreground line">Ou {product.max_installments}x </span>  {formatPrice(product.original_price / 10)}</p>)}
                 {product.original_price && false && (<p className="text-sm text-muted-foreground line">Ou {formatPrice(product.price)} à vista </p>)}
 
               </div>
@@ -208,8 +208,6 @@ const ProductDetail = () => {
               initialIndex={activeImageIndex}
               onSlideChange={(index) => setActiveImageIndex(index)}
             />
-
-           
           </div>
         )}
       </main>

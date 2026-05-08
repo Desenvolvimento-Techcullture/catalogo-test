@@ -31,7 +31,7 @@ const App = () => {
 
   useEffect(() => {
     trackPageVisiting();
-  }, []);
+  }, [queryClient]);
 
   return (
     <QueryClientProvider client={queryClient}>

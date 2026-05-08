@@ -22,7 +22,9 @@ const CategoriesSection = ({
     <section className={`${sectionClassName} ${className}`}>
       <div className="container mx-auto px-4">
         <div className="flex gap-4 overflow-x-auto pb-2">
-          {categories.map((category) => (
+          {categories
+          .sort( (a,b) => a - b)
+          .map((category) => (
             <Link
               key={category}
               to={`/products?category=${encodeURIComponent(category)}`}
