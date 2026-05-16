@@ -37,6 +37,7 @@ const ProductCardHighlight = ({
   const navigate = useNavigate();
   const isOutOfStock =  quantity < 1 ;
   const { user, isAuthenticated } = useAuth();
+  const isSeller = (user?.role == 'seller');
 
   const discount = original_price
     ? Math.round(
@@ -102,7 +103,7 @@ const ProductCardHighlight = ({
 
           <div className="mt-3">
            
-            { ( max_installments > 0)  && !isAuthenticated ?
+            { ( max_installments > 0)  && !isSeller ?
             (
             <><p className="price-current">  {formatPrice(price)}</p>
             <p className="text-sm text-muted-foreground line">à vista Ou {formatPrice(original_price)} em {max_installments}x {formatPrice(original_price / max_installments)}  </p></>

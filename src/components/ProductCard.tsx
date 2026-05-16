@@ -37,8 +37,8 @@ const ProductCard = ({
   const navigate = useNavigate();
   const isOutOfStock =  quantity < 1 ;
 
-  const { user, isAuthenticated, logout } = useAuth();
-
+  const { user } = useAuth();
+  const isSeller = (user?.role == 'seller');
   const discount = original_price
     ? Math.round(
       ((original_price - price) / original_price) * 100
@@ -103,15 +103,15 @@ const ProductCard = ({
           </p> */}
 
           <div className="mt-3">
-            {original_price && original_price > price && !isAuthenticated && (
+            {original_price && original_price > price && !isSeller && (
               <p className="text-sm text-muted-foreground ">{formatPrice(original_price)}</p>
             )}
-            { ( max_installments > 0) && !isAuthenticated ?
+            { ( max_installments > 0) && !isSeller ?
             (<><p className="price-current">  <span className="text-sm text-muted-foreground line"> {max_installments}x </span>  {formatPrice(original_price / max_installments)}</p><p className="text-sm text-muted-foreground line">Ou {formatPrice(price)} à vista </p></>
             ):
             (<p className="price-current">   {formatPrice(price)}</p>)}
      
-            {discount > 0 && !isAuthenticated &&(
+            {discount > 0 && !isSeller &&(
               <p className="price-discount-percent mt-1">
                 {discount}% de desconto
               </p>
