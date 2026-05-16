@@ -18,7 +18,7 @@ import { formatPrice } from "@/lib/utils";
 import { Order, PaymentMethod } from "@/lib/types";
 import { calculateShipping, company } from "@/assets/data"
 import SellerLabel from "@/components/SellerLabel";
-import { useCatalogTracking } from "@/hooks/catalogTrnking"; 
+import { useCatalogTracking } from "@/hooks/catalogTrnking";
 import { useAuth } from "@/contexts/AuthContext";
 
 const checkoutSchema = z.object({
@@ -37,6 +37,8 @@ const checkoutSchema = z.object({
   state: z.string().optional(),
   shippingCity: z.string().optional(),
   paymentMethod: z.string().min(1, "Selecione uma forma de pagamento").optional(),
+  price: z.string().optional(),
+  installment: z.string().optional(),
   observations: z.string().optional(),
 });
 
@@ -56,7 +58,7 @@ const Checkout = () => {
   // const seller = sessionStorage.getItem('tech-catalog-seller');
   const seller = user?.name;
   const isSeller = (user?.role == 'seller');
-  
+
   const form = useForm<CheckoutForm>({
     resolver: zodResolver(checkoutSchema),
     defaultValues: {
@@ -130,7 +132,7 @@ const Checkout = () => {
   const generateWhatsAppMessage = (data: CheckoutForm) => {
     let message = "🛒 *NOVO PEDIDO*\n\n";
 
-    message +=  seller ? `Vendedor: ${seller} \n\n`: "";
+    message += seller ? `Vendedor: ${seller} \n\n` : "";
     message += "📋 *PRODUTOS:*\n";
 
 
@@ -165,7 +167,12 @@ const Checkout = () => {
       message += `CEP: ${data.cep}\n`;
     }
 
-    message += `\n💳 *PAGAMENTO:* ${data.paymentMethod}\n`;
+    message += `\n💳 *PAGAMENTO:* \n`;
+    message += `${data.paymentMethod}\n`;
+
+    if (data.price) {
+      message += `Cliente pagará ${data.price} em ${data.installment ?? 1}x \n`;
+    }
 
     if (data.observations) {
       message += `\n📝 *OBSERVAÇÕES:* ${data.observations}\n`;
@@ -629,7 +636,7 @@ const Checkout = () => {
                         3
                       </Badge>
                       <CreditCard className="w-5 h-5" />
-                      Como gostaria de pagar?
+                      {!isSeller ? 'Como gostaria de pagar?' : 'Como o cliente vai pagar?'}
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -660,6 +667,43 @@ const Checkout = () => {
                         </FormItem>
                       )}
                     />
+                    {isSeller && (
+                      <div className="grid grid-cols-3 gap-4">
+                       
+                        <FormField
+                          control={form.control}
+                          name="price"
+                          render={({ field }) => (
+                            <FormItem className="col-span-2">
+                              <FormLabel>Preço</FormLabel>
+                              <FormControl>
+                                <Input {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                         <FormField
+                          control={form.control}
+                          name="installment"
+                          render={({ field }) => (
+                            <FormItem className="col-span-1">
+                              <FormLabel>Em quantas vezes</FormLabel>
+                              <FormControl>
+                                <Input {...field} 
+                                  type="number"
+                                  defaultValue={1}
+                                  min={1}
+                                  max={12}
+                                  step={1}
+                                />
+                              </FormControl>
+                            </FormItem>
+                          )}
+                        />
+
+                      </div>
+                    )}
 
                     <FormField
                       control={form.control}
@@ -733,7 +777,7 @@ const Checkout = () => {
                   <span>Total</span>
                   <span>{formatPrice(getFinalTotal())}</span>
                 </div>
-                <Separator/>
+                <Separator />
                 <SellerLabel />
                 {/* Cupom de desconto */}
                 {/* <div className="space-y-2 pt-4 border-t">
@@ -751,17 +795,17 @@ const Checkout = () => {
                 </div> */}
               </CardContent>
               <div className="p-6" >
-              <Button
-                type="submit"
-                form="checkout-form"
-                className="w-full h-12 text-lg"
-              >
-                Finalizar Pedido no WhatsApp
-              </Button>
-            </div>
+                <Button
+                  type="submit"
+                  form="checkout-form"
+                  className="w-full h-12 text-lg"
+                >
+                  Finalizar Pedido no WhatsApp
+                </Button>
+              </div>
             </Card>
 
-            
+
           </div>
 
         </div>

@@ -107,8 +107,8 @@ const ProductDetail = () => {
                   {/* {formatPrice(  product.original_price || product.price)} */}
                   {formatPrice( product.price)}
                 </p>
-                {product.max_installments && (user.role != 'seller') && (<p className="price-current">  <span className="text-sm text-muted-foreground line">Ou {product.max_installments}x </span>  {formatPrice(product.original_price / product.max_installments)}</p>)}
-                {product.original_price && (user.role != 'seller') && (<p className="text-sm text-muted-foreground line">Total a prazo {formatPrice(product.original_price)}</p>)}
+                {product.max_installments && (user?.role != 'seller') && (<p className="price-current">  <span className="text-sm text-muted-foreground line">Ou {product.max_installments}x </span>  {formatPrice(product.original_price / product.max_installments)}</p>)}
+                {product.original_price && (user?.role != 'seller') && (<p className="text-sm text-muted-foreground line">Total a prazo {formatPrice(product.original_price)}</p>)}
 
               </div>
 
