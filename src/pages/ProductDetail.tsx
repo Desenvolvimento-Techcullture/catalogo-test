@@ -9,6 +9,7 @@ import { useProduct } from "@/contexts/ProductContext";
 import { formatPrice } from "@/lib/utils";
 import { useCatalogTracking } from "@/hooks/catalogTrnking";
 import { ImageCarousel } from "@/components/ImageCarousel";
+import { useAuth } from "@/contexts/AuthContext";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -20,6 +21,7 @@ const ProductDetail = () => {
   const { products } = useProduct();
   const { trackAddToCart, trackViewProduct} = useCatalogTracking();
   const product = products.find((p) => p.id == parseInt(id));
+  const { user, isAuthenticated, logout } = useAuth();
 
    // Rastreia o produto
    useEffect(() => {
@@ -28,45 +30,6 @@ const ProductDetail = () => {
     }
   }, [product]);
   
-
-  const goToPrevious = () => {
-    setActiveImageIndex((prev) =>
-      prev === 0 ? product.images.length - 1 : prev - 1
-    );
-  };
-
-  const goToNext = () => {
-    setActiveImageIndex((prev) =>
-      prev === product.images.length - 1 ? 0 : prev + 1
-    );
-  };
-
-  // Dispositivo Movel
-  const [touchStartX, setTouchStartX] = useState<number | null>(null);
-  const [touchEndX, setTouchEndX] = useState<number | null>(null);
-  const handleTouchStart = (e: React.TouchEvent) => {
-    setTouchEndX(null);
-    setTouchStartX(e.targetTouches[0].clientX);
-  };
-  
-  const handleTouchMove = (e: React.TouchEvent) => {
-    setTouchEndX(e.targetTouches[0].clientX);
-  };
-  
-  const handleTouchEnd = () => {
-    if (!touchStartX || !touchEndX) return;
-  
-    const distance = touchStartX - touchEndX;
-    const minSwipeDistance = 50;
-  
-    if (distance > minSwipeDistance) {
-      goToNext();
-    } else if (distance < -minSwipeDistance) {
-      goToPrevious();
-    }
-  };
-  // Fim do dispositivo movel
-
   if (!product) {
     return (
       <>
@@ -144,8 +107,8 @@ const ProductDetail = () => {
                   {/* {formatPrice(  product.original_price || product.price)} */}
                   {formatPrice( product.price)}
                 </p>
-                {product.max_installments && true && (<p className="price-current">  <span className="text-sm text-muted-foreground line">Ou {product.max_installments}x </span>  {formatPrice(product.original_price / 10)}</p>)}
-                {product.original_price && false && (<p className="text-sm text-muted-foreground line">Ou {formatPrice(product.price)} à vista </p>)}
+                {product.max_installments && (user.role != 'seller') && (<p className="price-current">  <span className="text-sm text-muted-foreground line">Ou {product.max_installments}x </span>  {formatPrice(product.original_price / 10)}</p>)}
+                {product.original_price && (user.role != 'seller') && (<p className="text-sm text-muted-foreground line">Ou {formatPrice(product.price)} à vista </p>)}
 
               </div>
 

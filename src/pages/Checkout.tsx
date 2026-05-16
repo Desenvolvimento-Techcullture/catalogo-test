@@ -52,9 +52,10 @@ const Checkout = () => {
   const whatsapp = company.whatsapp;
   const { authFetch } = useAuthFetch();
   const { trackPurchase } = useCatalogTracking();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user } = useAuth();
   // const seller = sessionStorage.getItem('tech-catalog-seller');
   const seller = user?.name;
+  const isSeller = (user?.role == 'seller');
   
   const form = useForm<CheckoutForm>({
     resolver: zodResolver(checkoutSchema),

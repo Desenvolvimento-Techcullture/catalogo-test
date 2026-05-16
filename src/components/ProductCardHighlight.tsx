@@ -8,6 +8,7 @@ import {
 } from "./ui/tooltip";
 import { ProductCarousel } from "@/components/ProductCarousel";
 import { formatPrice } from "@/lib/utils";
+import { useAuth } from "@/contexts/AuthContext";
 
 
 interface ProductCardProps {
@@ -35,6 +36,7 @@ const ProductCardHighlight = ({
 }: ProductCardProps) => {
   const navigate = useNavigate();
   const isOutOfStock =  quantity < 1 ;
+  const { user, isAuthenticated } = useAuth();
 
   const discount = original_price
     ? Math.round(
@@ -100,9 +102,10 @@ const ProductCardHighlight = ({
 
           <div className="mt-3">
            
-            { ( max_installments > 0) ?
+            { ( max_installments > 0)  && !isAuthenticated ?
             (
-            <><p className="price-current">  {formatPrice(price)}</p><p className="text-sm text-muted-foreground line">à vista Ou {formatPrice(original_price)} em {max_installments}x {formatPrice(original_price / max_installments)}  </p></>
+            <><p className="price-current">  {formatPrice(price)}</p>
+            <p className="text-sm text-muted-foreground line">à vista Ou {formatPrice(original_price)} em {max_installments}x {formatPrice(original_price / max_installments)}  </p></>
             // (<><p className="price-current">   {formatPrice(price)}</p> <p className="text-sm text-muted-foreground line">Ou {formatPrice(original_price)} em até {max_installments}x </p></>)
             // (<p className="price-current">   {formatPrice(price)}</p>
             )
