@@ -44,7 +44,10 @@ import { useAuth } from "./AuthContext";
         
         if (!data) throw new Error("Erro ao buscar produtos");
         setCategories([...new Set(data.map(product => product.category).sort((a, b) => a.localeCompare(b)))]);
-        setProducts(data.map( prod => ({...prod, price: user?.role == 'seller' ? prod.reseller_price : prod.price })));
+        setProducts(data.map( prod => ({...prod, 
+                                        price: user?.role == 'seller' ? prod.reseller_price : prod.price,
+                                        original_price: user?.role == 'seller' ? prod.reseller_price * 1.15: prod.original_price,
+                                       })));
       } catch {
         setError("Erro ao carregar produtos");
       } finally {

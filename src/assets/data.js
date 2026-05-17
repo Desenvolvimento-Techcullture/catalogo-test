@@ -72,7 +72,11 @@ export const availableCities = [
 ];
 
 export const freeCities = [
+    "Belo Horizonte",
+    "Contagem",
+    "Ribeirão das Neves",
     "Santa Luzia",
+    "Vespasiano",
 ];
 
 export const calculateShipping = (city) => {

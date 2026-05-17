@@ -71,6 +71,7 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const discount = useMemo( () =>{
+
     return items.reduce(
       (sum, item) => {
         return ( ["Pix","Dinheiro"].includes(paymentMethod) ? 
