@@ -7,7 +7,7 @@ export const company = {
     name: 'DISTRIMOV',
     logo: '/logo.jpg',
     slogan: 'Distrimov atacarejo',
-    address: '',
+    address: 'R. Expedito Flaviano da Costa, 360 - Lagoa, Belo Horizonte - MG, 31578-040, Brasil',
     phone: '+55 (31) 98808-1254',
     email: 'distrimovatacarejo@hotmail.com',
     instagram: 'https://www.instagram.com/distrimov_atacarejo/',

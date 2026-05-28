@@ -54,10 +54,6 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-medium text-gray-800">Contato</h4>
             <ul className="space-y-2">
-              { company.address && (<li className="flex items-center gap-2 ">
-                <MapPin className="h-4 w-4" />
-                <span className="whitespace-pre-line">{company.address}</span>
-              </li> ) }
               {company.phone && (<li className="flex items-center gap-2 ">
                 <Phone className="h-4 w-4" />
                 <span>{company.phone}</span>
@@ -66,6 +62,25 @@ const Footer = () => {
                 <Mail className="h-4 w-4" />
                 <span>{company.email}</span>
               </li>)}
+              { company.address && (<li className="flex items-center gap-2 ">
+                <MapPin className="h-4 w-4" />
+                <span className="whitespace-pre-line">{company.address}</span>
+              </li> ) }
+               {/* Google Maps */}
+               { company.address && (<div className="w-full h-32 overflow-hidden border">
+            <iframe
+              title="Mapa da empresa"
+              width="100%"
+              height="100%"
+              frameBorder="0"
+              style={{ border: 0 }}
+              loading="lazy"
+              allowFullScreen
+              src={`https://www.google.com/maps?q=${encodeURIComponent(
+                company.address
+              )}&output=embed`}
+            />
+            </div>)}
             </ul>
           </div>
 
