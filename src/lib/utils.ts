@@ -32,3 +32,8 @@ text
   .toLowerCase()
   .normalize("NFD")
   .replace(/[\u0300-\u036f]/g, "");
+
+
+  export const swapArrayElement = (array, i, j) => {
+    [array[i], array[j]] = [array[j], array[i]];
+}

@@ -38,7 +38,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Order, Customer, ProductForm } from "@/lib/types";
 import { useAuthFetch } from "@/hooks/use-auth-fetch";
-import { formatDateBR } from "@/lib/utils";
+import { formatDateBR, swapArrayElement } from "@/lib/utils";
 import WhatsAppIcon from "@/components/WhatsAppIcon";
 import { normalizeText } from "@/lib/utils";
 import CreatableSelect from "react-select/creatable";
@@ -65,6 +65,7 @@ const Admin = () => {
   const [isSellerDialogOpen, setIsSellerDialogOpen] = useState(false)
   const [editingSellerId, setEditingSellerId] = useState<string | null>(null)
   const [searchSeller, setSearchSeller] = useState("")
+  const [dragStart, setDragStart] = useState(null);
 
   const [sellerForm, setSellerForm] = useState({
     name: "",
@@ -284,6 +285,28 @@ const Admin = () => {
     setFormData({ ...formData, images: updated });
   };
 
+  const handleDragStart = (e) => {
+    // e.preventDefault();
+    e.dataTransfer.setData('text/plain', e.target.id);
+    // setDragStart(e.target.id);
+  }
+  const handleDragEnd = (e) => {
+    e.preventDefault();
+    // console.log('item arrastado', dragStart, e.target.id);
+  }
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    const updated = [...formData.images];
+    const draggedId = e.dataTransfer.getData('text/plain');
+    const targetId = e.target.id;
+
+    if (draggedId != targetId) {
+      swapArrayElement(updated, draggedId, targetId);
+      setFormData({ ...formData, images: updated })
+    }
+  }
+
   const handleSubmitProduct = async (e: React.FormEvent) => {
     e.preventDefault();
 
@@ -338,7 +361,7 @@ const Admin = () => {
     if (!confirm("Deseja realmente deletar este vendedor?")) return;
     const index = sellers.findIndex((p) => p.id == parseInt(id));
     sellers.splice(index, 1);
-    authFetch({url :`users/${id}`, method : "DELETE"});
+    authFetch({ url: `users/${id}`, method: "DELETE" });
     // localStorage.setItem("products", JSON.stringify(initialProducts));
 
     toast({ title: "Vendedor deletado", description: "Produto deletado com sucesso!" });
@@ -541,8 +564,21 @@ const Admin = () => {
                         <input id="image-upload" type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
                         <div className="flex gap-2 flex-wrap mt-2">
                           {formData.images.map((img, idx) => img && (
-                            <div key={idx} className="relative">
-                              <img src={img} alt={`Preview ${idx + 1}`} className="h-16 w-16 object-cover rounded-md" />
+                            <div key={idx}
+                              className="relative"
+                              onDrop={handleDrop}
+                            >
+                              <img src={img} alt={`Preview ${idx + 1}`}
+                                draggable
+                                id={idx}
+                                className="h-16 w-16 object-cover rounded-md"
+                                onDragStart={handleDragStart}
+                                // onDragEnd={handleDragEnd}
+                                onDragOver={e => {
+                                  e.preventDefault(); // necessário para permitir drop
+                                }}
+                                onDrop={handleDrop}
+                              />
                               <button type="button" onClick={() => handleRemoveImage(idx)} className="absolute -top-2 -right-2 bg-red-600 text-white rounded-full p-1">
                                 <X className="h-3 w-3" />
                               </button>

@@ -18,6 +18,7 @@ const Login = () => {
     email: '',
     phone: '',
     password: '',
+    remember: false
   });
 
   const { login, register } = useAuth();
@@ -32,7 +33,7 @@ const Login = () => {
       let success: boolean;
 
       if (isLogin) {
-        success = await login(formData.email, formData.password);
+        success = await login(formData.email, formData.password, formData.remember);
       } else {
         if (!formData.name.trim()) {
           toast({
@@ -81,9 +82,9 @@ const Login = () => {
           <div className="flex justify-center mb-8">
             <div className="h-20 w-20 rounded-2xl  from-secondary to-warning flex items-center justify-center shadow-gold">
               {/* <Gavel className="h-10 w-10 text-secondary-foreground" /> */}
-              <img src={company.logo} 
-              alt={company.name} 
-              className='border w-64 rounded-full bg-cover bg-center'
+              <img src={company.logo}
+                alt={company.name}
+                className='border w-64 rounded-full bg-cover bg-center'
               />
             </div>
           </div>
@@ -195,7 +196,19 @@ const Login = () => {
               </div>
               <p className="text-xs text-muted-foreground">Mínimo de 6 caracteres</p>
             </div>
-
+            <div className="flex items-center">
+              <input
+                id="remember-me"
+                name="remember-me"
+                type="checkbox"
+                checked={formData.remember}
+                onChange={ (e) => setFormData({...formData, remember: e.target.checked})}
+                className="h-4 w-4 rounded border-gray-300 text-primary-600 focus:ring-primary-500"
+              />
+              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700">
+                Lembrar-me
+              </label>
+            </div>
             <Button
               type="submit"
               size="lg"
@@ -211,7 +224,7 @@ const Login = () => {
                 isLogin ? 'Entrar' : 'Criar Conta'
               )}
             </Button>
-            { (!isLogin && company.uriTermosCondicoes ) && (<div className="flex items-center">
+            {(!isLogin && company.uriTermosCondicoes) && (<div className="flex items-center">
               <input
                 id="terms"
                 name="terms"

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Search, ShoppingCart, Menu, X, LogOut, User, UserCheck, Store } from "lucide-react";
 import { Button } from "./ui/button";
@@ -17,7 +17,7 @@ const Header = () => {
   const navigate = useNavigate();
   const { itemCount } = useCart();
   const { user, isAuthenticated, logout } = useAuth();
-
+  console.log(user);
   const isActive = (path: string) => location.pathname === path;
 
   const handleSearch = (e: React.FormEvent) => {

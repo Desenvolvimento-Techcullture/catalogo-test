@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useCallback } from 'react';
+import React, { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { User, AuthState, AuthContextType } from '@/lib/types';
 import { useAuthFetch } from "@/hooks/use-auth-fetch";
 
@@ -9,24 +9,29 @@ const USERS_API_URL = 'https://techculture.portaldeanuncios.com/distrimov/api/us
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const storedUser = JSON.parse(localStorage.getItem('user'));
   const [authState, setAuthState] = useState<AuthState>({
-    user: null,
-    isAuthenticated: false,
+    user: storedUser,
+    isAuthenticated: !!storedUser,
   });
   const { authFetch } = useAuthFetch();
 
-  const login = useCallback(async (login: string, password: string): Promise<boolean> => {
+  const login = useCallback(async (login: string, password: string, remember: boolean = false): Promise<boolean> => {
+    
+    console.log(remember);
     try {
       // Busca usuários da API      
-      const users: User[] = await authFetch({url: `/users?email=${login}`});
-      const user = users.find(u => (u.email == login) && (u.password === btoa(password)) );
+      const users: User[] = await authFetch({ url: `/users?email=${login}` });
+      const user = users.find(u => (u.email == login) && (u.password === btoa(password)));
       const token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjEsImVtYWlsIjoiYWRtaW5AZW1haWwuY29tIiwic3lzIjoiY2F0YWxvZyIsIm93bmVyIjoidGVjaGN1bHR1cmUiLCJpYXQiOjE3Njk1MjQ5NzksImV4cCI6MTc2OTUyODU3OX0=.jZP+Ek0Ojx5JuF7EOTO2C48Y0BgX76JV2STJ5aku2ec=';
-      console.log(users);
+
       if (user && password.length >= 6) {
         setAuthState({ user, isAuthenticated: true });
+        if (remember)
+          localStorage.setItem('user', JSON.stringify(user));
         return true;
       }
-      
+
       return false;
     } catch (error) {
       console.error('Erro no login:', error);
@@ -65,6 +70,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = useCallback(() => {
     setAuthState({ user: null, isAuthenticated: false });
+    localStorage.removeItem('user');
   }, []);
 
   return (
