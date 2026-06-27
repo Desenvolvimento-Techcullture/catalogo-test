@@ -66,6 +66,7 @@ const Admin = () => {
   const [editingSellerId, setEditingSellerId] = useState<string | null>(null)
   const [searchSeller, setSearchSeller] = useState("")
   const [dragStart, setDragStart] = useState(null);
+  const [newImage, setNewImage] = useState("");
 
   const [sellerForm, setSellerForm] = useState({
     name: "",
@@ -548,7 +549,7 @@ const Admin = () => {
                     </div>
                     {/* Upload múltiplas imagens */}
                     <div>
-                      <Label htmlFor="image-upload">Upload de Imagens</Label>
+                      <Label htmlFor="image-upload">Upload de Imagens - Arraste as imagens para trocar de posição</Label>
                       <div className="flex items-center gap-4 flex-wrap">
                         <Button type="button" variant="outline" disabled={isUploading} onClick={() => document.getElementById("image-upload")?.click()}>
                           {isUploading ? (
@@ -563,6 +564,7 @@ const Admin = () => {
                         </Button>
                         <input id="image-upload" type="file" accept="image/*" multiple className="hidden" onChange={handleImageUpload} />
                         <div className="flex gap-2 flex-wrap mt-2">
+                          
                           {formData.images.map((img, idx) => img && (
                             <div key={idx}
                               className="relative"
@@ -573,9 +575,11 @@ const Admin = () => {
                                 id={idx}
                                 className="h-16 w-16 object-cover rounded-md"
                                 onDragStart={handleDragStart}
+                                onTouchStart={handleDragStart}
                                 // onDragEnd={handleDragEnd}
                                 onDragOver={e => {
                                   e.preventDefault(); // necessário para permitir drop
+                                  e.dataTransfer.dropEffect = "link";
                                 }}
                                 onDrop={handleDrop}
                               />
@@ -588,11 +592,37 @@ const Admin = () => {
                       </div>
                     </div>
 
-                    <div>
+                    {/* <div>
                       <Label>Ou insira URLs das imagens (uma por linha)</Label>
                       <Textarea value={formData.images.join("\n")} onChange={(e) => setFormData({ ...formData, images: e.target.value.split("\n").map(url => url.trim()) })} />
-                    </div>
+                    </div> */}
 
+                    <div className="relative">
+                      <Label>Ou insira URL da imagem</Label>
+                      <Input
+                        id="newimage"
+                        value={newImage}
+                        onChange={(e) => setNewImage(e.target.value)}
+                      />
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => {
+                          if (!newImage.trim()) return;
+
+                          setFormData({
+                            ...formData,
+                            images: [...formData.images, newImage],
+                          });
+
+                          setNewImage("");
+                        }}
+                        className="absolute m-2 bottom-0 right-0 h-6 primary p-2"
+                      >
+                        {/* <Upload className="m-2 h-4 w-4" /> */}
+                        Inserir Imagem
+                      </Button>
+                    </div>
                     <div>
                       <Label>Descrição</Label>
                       <Textarea value={formData.description} onChange={e => setFormData({ ...formData, description: e.target.value })} />
@@ -689,7 +719,7 @@ const Admin = () => {
                           <Button title="Chamar no WhatsApp" className="h-5 w-5 mx-5" variant="link" onClick={() => handleWhatsAppMessage(selectedOrder.customer.name, selectedOrder.customer.phone)}>
                             <WhatsAppIcon className=" text-green-500" />
                           </Button> </p>
-                        <p><strong>Endereço:</strong> {selectedOrder.shipping?.address}</p>
+                        <p><strong>Endereço:</strong> {selectedOrder.shipping?.address} {selectedOrder.shipping?.number}, {selectedOrder.shipping?.neighborhood} - {selectedOrder.shipping?.city} - {selectedOrder.shipping?.state}</p>
 
                       </div>
 
@@ -730,7 +760,8 @@ const Admin = () => {
                         <p><strong>Total:</strong> R$ {selectedOrder.total.toFixed(2)}</p>
                         <p><strong>Forma de pagamento:</strong> {selectedOrder.paymentMethod}</p>
                         <p><strong>Status:</strong> {selectedOrder.status}</p>
-
+                        <p className="whitespace-pre-line"><strong>Observação:</strong> {selectedOrder.observations}</p>
+                        
                       </div>
 
                     </div>

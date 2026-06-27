@@ -170,11 +170,11 @@ const Products = () => {
                   <SheetHeader>
                     <SheetTitle>Filtros</SheetTitle>
                   </SheetHeader>
-                  <div className="mt-6 space-y-6">
+                  <div className="mt-6 space-y-6 h-full overflow-y-auto">
                     {/* Categories */}
                     <div>
                       <h3 className="text-sm font-medium mb-4">Categorias</h3>
-                      <div className="space-y-3">
+                      <div className="space-y-3 ">
                         {categories.map((category) => (
                           <div key={category} className="flex items-center gap-2">
                             <Checkbox
