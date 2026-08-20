@@ -205,7 +205,7 @@ const Checkout = () => {
       items: items.map(item => ({
         id: item.id,
         name: item.name,
-        price: getPrice(item),
+        price: isSeller ? item.price : getPrice(item),
         quantity: item.quantity,
       })),
       shipping: {

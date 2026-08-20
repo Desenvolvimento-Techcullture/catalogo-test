@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useMemo, ReactNode } from "react";
 import { CartItem } from "@/lib/types/product";
 import { Product, PaymentMethod } from "@/lib/types";
 import { toast } from "@/hooks/use-toast";
+import { useAuth } from "./AuthContext";
 
 interface CartContextType {
   items: CartItem[];
@@ -21,7 +22,12 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [items, setItems] = useState<CartItem[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>("Pix")
-
+  //bloco adicionado provisoriamente para atender as necessidades do vendedor
+  const { user } = useAuth();
+  // const seller = sessionStorage.getItem('tech-catalog-seller');
+  const seller = user?.name;
+  const isSeller = (user?.role == 'seller');
+  //fim do bloco
   const addToCart = (product: Product, selectedSize?: string) => {
     setItems((prev) => {
       const existingItem = prev.find(
@@ -71,6 +77,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const discount = useMemo( () =>{
+    //para o vendedor não ha desconto pois o preço é minimo
+    if (isSeller) return 0;
 
     return items.reduce(
       (sum, item) => {
@@ -96,6 +104,8 @@ export const CartProvider = ({ children }: { children: ReactNode }) => {
     //   default:
     //     return item.original_price ?? item.price;
     // }
+    if (isSeller) return Math.min(item.original_price, item.price);
+
     return (item.original_price ?? item.price);
   };
   
