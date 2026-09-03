@@ -103,6 +103,7 @@ const ProductDetail = () => {
                   {product.category}
                 </p>
                 <h1 className="text-4xl font-light mb-4">{product.name}</h1>
+                <p className="price-current">  <span className="text-sm text-muted-foreground line">À vista </span>  </p>
                 <p className="text-3xl font-light text-primary">
                   {/* {formatPrice(  product.original_price || product.price)} */}
                   {formatPrice( product.price)}

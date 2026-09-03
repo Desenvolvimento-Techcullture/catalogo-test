@@ -5,7 +5,7 @@
 
 export const company = {
     name: 'DISTRIMOV',
-    logo: '/logo.jpg',
+    logo: '/logo2.jpeg',
     slogan: 'Distrimov atacarejo',
     address: 'R. Expedito Flaviano da Costa, 360 - Lagoa, Belo Horizonte - MG, 31578-040, Brasil',
     phone: '+55 (31) 98808-1254',
@@ -19,17 +19,20 @@ export const company = {
     youtube: '',
 }
 
-export const banners = [{
-    id: "1",
-    image: './banner.png',
-    title: "",
-    description: "",
-    buttons: [
-        { link: "/products", description: "Ver Produtos", variant: 'outlineDark' },
-        { link: company.whatsapp, description: "Compre pelo WhatsApp", variant: 'default' },
-        //     { link: "/products", description: "outras coisas legais legais", variant: 'primary' },
-    ]
-}];
+export const banners = [
+    
+    {
+        id: "1",
+        image: './hero1.jpeg',
+        title: "",
+        description: "",
+        buttons: [
+            { link: "/products", description: "Ver Produtos", variant: 'outlineDark' },
+            { link: company.whatsapp, description: "Compre pelo WhatsApp", variant: 'default' },
+            //     { link: "/products", description: "outras coisas legais legais", variant: 'primary' },
+        ]
+    }
+];
 
 
 

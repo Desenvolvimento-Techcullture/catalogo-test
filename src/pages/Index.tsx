@@ -40,12 +40,12 @@ const Index = () => {
               </div>
       <main className="flex-1">
         {/* Hero Section */}
-        {(banners.length == 1) && (<section className="relative aspect-[7/3] w-full landscape:h-[50vh] landscape:min-h-[300px] overflow-hidden bg-secondary">
+        {(banners.length == 1) && (<section className="relative aspect-[6/3] w-full landscape:h-[70vh] landscape:min-h-[300px] overflow-hidden bg-secondary">
           <div className="absolute inset-0">
             <img
               src={banners[0].image}
               alt="Banner principal"
-              // className="h-full w-full object-contain"
+              // className=" w-full object-contain md:object-cover"
               className=" h-full md:w-full object-cover"
             />
             {/* <div className="absolute inset-0 bg-gradient-to-r from-background/80 to-transparent" /> */}

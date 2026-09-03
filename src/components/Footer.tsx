@@ -3,6 +3,7 @@ import { Facebook, Instagram, Twitter, Mail, Phone, MapPin, Youtube } from "luci
 import { company } from "@/assets/data.js";
 import WhatsAppIcon from "./WhatsAppIcon";
 import TikTokIcon from "./TiktokIcon";
+import meuPdf from "@/assets/Politica_troca.pdf";
 
 
 
@@ -47,6 +48,17 @@ const Footer = () => {
                   Contato
                 </Link>
               </li>
+              <li>
+                <a
+                  href={meuPdf}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-foreground transition-smooth"
+                >
+                  Política de trocas e devoluções
+                </a>
+
+              </li>
             </ul>
           </div>
 
@@ -58,29 +70,29 @@ const Footer = () => {
                 <Phone className="h-4 w-4" />
                 <span>{company.phone}</span>
               </li>)}
-              { company.email && (<li className="flex items-center gap-2 ">
+              {company.email && (<li className="flex items-center gap-2 ">
                 <Mail className="h-4 w-4" />
                 <span>{company.email}</span>
               </li>)}
-              { company.address && (<li className="flex items-center gap-2 ">
+              {company.address && (<li className="flex items-center gap-2 ">
                 <MapPin className="h-4 w-4" />
                 <span className="whitespace-pre-line">{company.address}</span>
-              </li> ) }
-               {/* Google Maps */}
-               { company.address && (<div className="w-full h-32 overflow-hidden border">
-            <iframe
-              title="Mapa da empresa"
-              width="100%"
-              height="100%"
-              frameBorder="0"
-              style={{ border: 0 }}
-              loading="lazy"
-              allowFullScreen
-              src={`https://www.google.com/maps?q=${encodeURIComponent(
-                company.address
-              )}&output=embed`}
-            />
-            </div>)}
+              </li>)}
+              {/* Google Maps */}
+              {company.address && (<div className="w-full h-32 overflow-hidden border">
+                <iframe
+                  title="Mapa da empresa"
+                  width="100%"
+                  height="100%"
+                  frameBorder="0"
+                  style={{ border: 0 }}
+                  loading="lazy"
+                  allowFullScreen
+                  src={`https://www.google.com/maps?q=${encodeURIComponent(
+                    company.address
+                  )}&output=embed`}
+                />
+              </div>)}
             </ul>
           </div>
 
@@ -96,7 +108,7 @@ const Footer = () => {
               >
                 <Instagram className="h-5 w-5" />
               </a>)}
-              { company.facebook && (<a
+              {company.facebook && (<a
                 href={company.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -104,7 +116,7 @@ const Footer = () => {
               >
                 <Facebook className="h-5 w-5" />
               </a>)}
-              { company.youtube && (<a
+              {company.youtube && (<a
                 href={company.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -112,7 +124,7 @@ const Footer = () => {
               >
                 <Youtube className="h-5 w-5" />
               </a>)}
-              { company.whatsapp && (<a
+              {company.whatsapp && (<a
                 href={company.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -120,7 +132,7 @@ const Footer = () => {
               >
                 <WhatsAppIcon className="h-5 w-5" />
               </a>)}
-              { company.twitter && (<a
+              {company.twitter && (<a
                 href={company.twitter}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -128,15 +140,15 @@ const Footer = () => {
               >
                 <Twitter className="h-5 w-5" />
               </a>)}
-              { company.tiktok && (<a
+              {company.tiktok && (<a
                 href={company.tiktok}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="tiktok"
-              > 
+              >
                 <TikTokIcon className="h-5 w-5" />
               </a>)}
-             
+
             </div>
           </div>
         </div>
