@@ -90,7 +90,7 @@ const Index = () => {
           title="title"
           subtitle="subtitle"
           categories={categories}
-          className=" md:hidden bg-primary  text-white"
+          className="bg-primary  text-white"
           linkClassName="  px-4 py-2 rounded-full text-sm border text-blue-700  border-blue-700 transition hover:bg-white/20 text-center whitespace-nowrap"
         />
         {/* Featured Products Section */}
