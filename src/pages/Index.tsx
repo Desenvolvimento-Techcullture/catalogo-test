@@ -91,7 +91,7 @@ const Index = () => {
           subtitle="subtitle"
           categories={categories}
           className="bg-primary  text-white"
-          linkClassName="  px-4 py-2 rounded-full text-sm border text-blue-700  border-blue-700 transition hover:bg-white/20 text-center whitespace-nowrap"
+          linkClassName="  px-4 py-2 rounded-full text-sm border text-primary  border-primary transition hover:bg-white/20 text-center whitespace-nowrap"
         />
         {/* Featured Products Section */}
         <section className="py-20 bg-background">
