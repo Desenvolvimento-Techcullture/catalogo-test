@@ -98,10 +98,10 @@ const Index = () => {
           <div className="container mx-auto px-4">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl text-primary font-light tracking-tight mb-4">
-                Produtos em Destaque
+              Ofertas Especiais
               </h2>
               <p className="text-lg text-muted-foreground">
-                Seleção especial das peças mais procuradas
+              Preços selecionados para você renovar sua casa pagando menos.
               </p>
             </div>
             <div className="flex justify-items-center">
