@@ -39,7 +39,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, []);
 
-  const register = useCallback(async (name: string, email: string, phone: string, password: string, role: string = 'user'): Promise<boolean> => {
+  const register = useCallback(async (name: string, email: string, phone: string, password: string, role: string = 'seller'): Promise<boolean> => {
     if (!name || !email || password.length < 6) {
       return false;
     }
