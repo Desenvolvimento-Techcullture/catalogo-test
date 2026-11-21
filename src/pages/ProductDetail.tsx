@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { ShoppingCart, ChevronLeft, X } from "lucide-react";
+import { ShoppingCart, ChevronLeft, X, Copy } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -10,6 +10,7 @@ import { formatPrice } from "@/lib/utils";
 import { useCatalogTracking } from "@/hooks/catalogTrnking";
 import { ImageCarousel } from "@/components/ImageCarousel";
 import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -22,6 +23,7 @@ const ProductDetail = () => {
   const { trackAddToCart, trackViewProduct} = useCatalogTracking();
   const product = products.find((p) => p.id == parseInt(id));
   const { user, isAuthenticated, logout } = useAuth();
+  const { toast } = useToast();
 
    // Rastreia o produto
    useEffect(() => {
@@ -51,6 +53,28 @@ const ProductDetail = () => {
     if (product.sizes && product.sizes.length > 0 && !selectedSize) return;
     addToCart(product, selectedSize);
     trackAddToCart(product);
+  };
+
+  const handleCopyLink = async () => {
+    const link = `${window.location.origin}/product/${product.id}`;
+    try {
+      await navigator.clipboard.writeText(link);
+      toast({ title: "Link copiado!", description: "Cole no WhatsApp para compartilhar." });
+    } catch {
+      const field = document.createElement("textarea");
+      field.value = link;
+      field.style.position = "fixed";
+      field.style.opacity = "0";
+      document.body.appendChild(field);
+      field.select();
+      const copied = document.execCommand("copy");
+      document.body.removeChild(field);
+      toast(
+        copied
+          ? { title: "Link copiado!", description: "Cole no WhatsApp para compartilhar." }
+          : { title: "Não foi possível copiar", description: link, variant: "destructive" }
+      );
+    }
   };
 
   return (
@@ -148,6 +172,16 @@ const ProductDetail = () => {
               >
                 <ShoppingCart className="h-5 w-5" />
                 Adicionar ao Carrinho
+              </Button>
+
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full gap-2"
+                onClick={handleCopyLink}
+              >
+                <Copy className="h-5 w-5" />
+                Copiar link para compartilhar
               </Button>
             </div>
           </div>
